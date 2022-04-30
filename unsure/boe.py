@@ -1,6 +1,6 @@
 # UPDATED DS
 #  v0.2
-#pylint: disable=no-member
+# pylint: disable=no-member
 # singleton: string
 # proposition: list of strings
 
@@ -21,11 +21,11 @@ import copy
 from itertools import chain, combinations
 
 
-
 class BOE:
     """
     A class to represent a DS-Theoretic Body of Evidence
     """
+
     def __init__(self, singletons):
         """
         Constructor
@@ -42,7 +42,6 @@ class BOE:
         # Lookup table containing keys of singletons in the masses_dsvector
         self._power = self._initialize_power()
 
-
     @staticmethod
     def _default_mass():
         """
@@ -50,7 +49,7 @@ class BOE:
         """
         return 0
 
-    #-------------------------------------
+    # -------------------------------------
     # DS-Theoretic Properties
 
     @property
@@ -98,7 +97,7 @@ class BOE:
         """
         return sum(self.dsvector.values())
 
-    #----------------------------------
+    # ----------------------------------
     # Key DS-Theoretic Operations
 
     def set_mass(self, proposition, mass):
@@ -112,14 +111,12 @@ class BOE:
         index = self._get_index_from_dsvector(proposition)
         self.dsvector = (index, mass)
 
-
     def set_mass_theta(self, mass):
         """
         Sets mass for the frame
         """
         index = self._get_index_from_dsvector(self.frame)
         self.dsvector = (index, mass)
-
 
     def get_mass(self, proposition):
         """
@@ -129,13 +126,12 @@ class BOE:
         index = self._get_index_from_dsvector(proposition)
         return self.dsvector[index]
 
-
     def get_normalized_mass(self, proposition):
         """
         Get normalized mass for a proposition
         """
         proposition = [x.lower() for x in proposition]
-        return self.get_mass(proposition)/self.normalizing_constant
+        return self.get_mass(proposition) / self.normalizing_constant
 
     def get_masses(self):
         """
@@ -155,7 +151,7 @@ class BOE:
         masses = self.get_masses()
         normalized_masses = {}
         for key, value in masses.items():
-            nmass = value/self.normalizing_constant
+            nmass = value / self.normalizing_constant
             normalized_masses.update({key: nmass})
         return normalized_masses
 
@@ -165,7 +161,7 @@ class BOE:
         """
         normalized_dsvector = {}
         for key, value in self.dsvector.items():
-            normalized_mass = value/self.normalizing_constant
+            normalized_mass = value / self.normalizing_constant
             normalized_dsvector.update({key: normalized_mass})
         return normalized_dsvector
 
@@ -181,7 +177,6 @@ class BOE:
             core.append(self.get_prop_from_dsvector(number))
         return core
 
-
     def belief(self, proposition):
         """
         Returns belief of a proposition
@@ -195,8 +190,7 @@ class BOE:
         for subset in non_zero_subsets:
             mass = self.get_mass(subset)
             belief += mass
-        return belief/self.normalizing_constant
-
+        return belief / self.normalizing_constant
 
     def plausibility(self, proposition):
         """
@@ -210,7 +204,7 @@ class BOE:
         for overlapping in non_zero_overlaps:
             mass = self.get_mass(overlapping)
             plausibility += mass
-        return plausibility/self.normalizing_constant
+        return plausibility / self.normalizing_constant
 
     def uncertainty(self, proposition):
         """
@@ -231,7 +225,6 @@ class BOE:
             uncertainties.update({str(proposition): uncertainty})
         return uncertainties
 
-
     def conditional_mass(self, proposition_b, proposition_a):
         """
         Returns conditional mass (b given a)
@@ -250,9 +243,8 @@ class BOE:
             if temp:
                 pl_a_minus_b = self.plausibility(temp)
 
-        mass_b_given_a = mass_b/(mass_b + pl_a_minus_b)
+        mass_b_given_a = mass_b / (mass_b + pl_a_minus_b)
         return mass_b_given_a
-
 
     def update(self, new_frame, alpha):
         """
@@ -287,7 +279,6 @@ class BOE:
             term2 = (1 - alpha) * total
             self.set_mass(prop_b, term1 + term2)
 
-
     def update_stream(self, list_boes, alpha):
         """
         CUE update for a list of boes
@@ -297,10 +288,7 @@ class BOE:
             self.update(boe, alpha)
             print(f"Unc at [{idx}]: {self.get_uncertainties()}")
 
-
-
-
-    #------------- SPECIALIZED DS HELPERS -------------------------
+    # ------------- SPECIALIZED DS HELPERS -------------------------
 
     def _initialize_power(self):
         """
@@ -311,10 +299,9 @@ class BOE:
         """
         power = []
         for i in range(len(self.frame)):
-            j = 2 ** i
+            j = 2**i
             power.append(j)
         return power
-
 
     def _get_index_from_dsvector(self, proposition):
         """
@@ -329,10 +316,11 @@ class BOE:
                 idx = self.frame.index(singleton)
                 key += self.power[idx]
             except:
-                raise ValueError('One of the singletons in the' +\
-                                 'proposition is not found in the frame')
+                raise ValueError(
+                    "One of the singletons in the"
+                    + "proposition is not found in the frame"
+                )
         return key
-
 
     def get_prop_from_dsvector(self, index):
         """
@@ -341,7 +329,6 @@ class BOE:
         indexes = self._find_powers_of_2(index)
         singletons = [self.frame[i] for i in indexes]
         return singletons
-
 
     def _get_subsets_from_dsvector(self, proposition):
         """
@@ -352,7 +339,7 @@ class BOE:
         with non-zero mass in the dsvector
         """
         subsets = []
-        for key, _value  in self.dsvector.items():
+        for key, _value in self.dsvector.items():
             key_proposition = self.get_prop_from_dsvector(key)
             if set(key_proposition).issubset(set(proposition)):
                 subsets.append(key_proposition)
@@ -369,8 +356,7 @@ class BOE:
                 overlapping.append(key_proposition)
         return overlapping
 
-
-    #-------------------- COMBINATION -------------------------
+    # -------------------- COMBINATION -------------------------
 
     def conjunctive_form(self, another_boe, proposition):
         """
@@ -389,7 +375,6 @@ class BOE:
                     mass += mass1 * mass2
         return mass
 
-
     def disjunctive_form(self, another_boe, proposition):
         """
         m(self union other_boe)
@@ -406,7 +391,6 @@ class BOE:
                 if list(set(prop1) | set(prop2)) == proposition:
                     mass += mass1 * mass2
         return mass
-
 
     def conflict(self, another_boe):
         """
@@ -436,7 +420,9 @@ class BOE:
         if self.conflict(another_boe) == 1:
             return None
 
-        return self.conjunctive_form(another_boe, proposition)/(1 - self.conflict(another_boe))
+        return self.conjunctive_form(another_boe, proposition) / (
+            1 - self.conflict(another_boe)
+        )
 
     def yager(self, another_boe, proposition):
         """
@@ -450,7 +436,9 @@ class BOE:
             return 0
 
         if proposition == another_boe.frame:
-            return self.conjunctive_form(another_boe, proposition) + self.conflict(another_boe)
+            return self.conjunctive_form(another_boe, proposition) + self.conflict(
+                another_boe
+            )
 
         return self.conjunctive_form(another_boe, proposition)
 
@@ -511,34 +499,36 @@ class BOE:
 
         return term1 + term2
 
-
     def gamma(self, another_boe, proposition1, proposition2):
         """
         Gamma(B,C) useful for PCR
         """
 
-        term1_numerator = (self.get_normalized_mass(proposition1)**2) * \
-        another_boe.get_normalized_mass(proposition2)
+        term1_numerator = (
+            self.get_normalized_mass(proposition1) ** 2
+        ) * another_boe.get_normalized_mass(proposition2)
 
-        denominator1 = self.get_normalized_mass(proposition1) + \
-        another_boe.get_normalized_mass(proposition2)
+        denominator1 = self.get_normalized_mass(
+            proposition1
+        ) + another_boe.get_normalized_mass(proposition2)
 
-        term2_numerator = (another_boe.get_normalized_mass(proposition1)**2) * \
-        self.get_normalized_mass(proposition2)
+        term2_numerator = (
+            another_boe.get_normalized_mass(proposition1) ** 2
+        ) * self.get_normalized_mass(proposition2)
 
-        denominator2 = another_boe.get_normalized_mass(proposition1) + \
-        self.get_normalized_mass(proposition2)
+        denominator2 = another_boe.get_normalized_mass(
+            proposition1
+        ) + self.get_normalized_mass(proposition2)
 
         ratio1 = 0
         if denominator1 != 0:
-            ratio1 = term1_numerator/denominator1
+            ratio1 = term1_numerator / denominator1
 
         ratio2 = 0
         if denominator2 != 0:
-            ratio2 = term2_numerator/denominator2
+            ratio2 = term2_numerator / denominator2
 
         return ratio1 + ratio2
-
 
     def pcr5_multisource(self, list_boes):
         """
@@ -560,8 +550,7 @@ class BOE:
             boe1 = new_boe
         return boe1
 
-
-    #------------- GENERIC HELPERS -------------------------
+    # ------------- GENERIC HELPERS -------------------------
 
     @staticmethod
     def _find_powers_of_2(number):
@@ -580,7 +569,6 @@ class BOE:
                 indexes.append(i)
         return indexes
 
-
     @staticmethod
     def _powerset(iterable):
         """
@@ -591,5 +579,6 @@ class BOE:
         """
 
         iterable_list = list(iterable)
-        return chain.from_iterable(combinations(iterable_list, r) \
-                                   for r in range(len(iterable_list)+1))
+        return chain.from_iterable(
+            combinations(iterable_list, r) for r in range(len(iterable_list) + 1)
+        )
