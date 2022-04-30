@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "unsure"
+version = "0.1.0"
+description = ""
+authors = ["Vasanth Sarathy <vsarathy@sift.net>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^8.1.3"
+pandas = "^1.4.2"
+jupyter = "^1.0.0"
+ipykernel = "^6.13.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+coverage = "^6.3.2"
+mypy = "^0.950"
+pre-commit = "^2.18.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
