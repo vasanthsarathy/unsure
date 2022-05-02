@@ -161,7 +161,10 @@ class BOE:
         """
         normalized_dsvector = {}
         for key, value in self.dsvector.items():
-            normalized_mass = value / self.normalizing_constant
+            if self.normalizing_constant != 0:
+                normalized_mass = value / self.normalizing_constant
+            else:
+                normalized_mass = value
             normalized_dsvector.update({key: normalized_mass})
         return normalized_dsvector
 
@@ -549,6 +552,58 @@ class BOE:
                 new_boe.set_mass(proposition, boe1.pcr5(boe2, proposition))
             boe1 = new_boe
         return boe1
+
+    def yager_multisource(self, list_boes):
+        """
+        Returns a fused BOE by repeatedly calling yager()
+
+        """
+        powers = list(self._powerset(self.frame))
+
+        boe1 = copy.copy(self)
+        # Doing YAGER in pairs
+        for _idx, boe2 in enumerate(list_boes):
+            new_boe = BOE(self.frame)
+            for proposition in powers:
+                new_boe.set_mass(proposition, boe1.yager(boe2, proposition))
+            boe1 = new_boe
+        return boe1
+
+    def dcr_multisource(self, list_boes):
+        """
+        Returns a fused BOE by repeatedly calling dcr()
+
+        """
+        powers = list(self._powerset(self.frame))
+
+        boe1 = copy.copy(self)
+        # Doing DCR in pairs
+        for _idx, boe2 in enumerate(list_boes):
+            new_boe = BOE(self.frame)
+            for proposition in powers:
+                new_boe.set_mass(proposition, boe1.dcr(boe2, proposition))
+            boe1 = new_boe
+        return boe1
+
+    def dubois_prade_multisource(self, list_boes):
+        """
+        Returns a fused BOE by repeatedly calling dubois_prade()
+
+        """
+        powers = list(self._powerset(self.frame))
+
+        boe1 = copy.copy(self)
+        # Doing Dubois in pairs
+        for _idx, boe2 in enumerate(list_boes):
+            new_boe = BOE(self.frame)
+            for proposition in powers:
+                new_boe.set_mass(proposition, boe1.dubois_prade(boe2, proposition))
+            boe1 = new_boe
+        return boe1
+
+
+
+
 
     # ------------- GENERIC HELPERS -------------------------
 
