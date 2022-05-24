@@ -307,3 +307,40 @@ def test_combination_multisources():
     assert abs(boe123.get_mass(["a"]) - 0.5) < THRESHOLD
     assert abs(boe123.get_mass(["b"]) - 0.4) < THRESHOLD
     assert abs(boe123.get_mass(["a", "b"]) - 0.01) < THRESHOLD
+
+def test_set_mases():
+    boe1 = BOE(["a", "b"])
+    boe1.set_mass(["a"], 0.6)
+    boe1.set_mass(["b"], 0.3)
+    boe1.set_mass(["a", "b"], 0.1)
+
+    masses_dict = boe1.get_masses()
+
+    boe2 = BOE(['a','b'])
+    boe2.set_masses(masses_dict)
+
+    assert boe1.dsvector == boe2.dsvector
+
+
+def test_update_example1():
+    """
+    Testing the CUE based update
+
+    Starting from ignorance, observe what happens with new data
+    """
+    alpha = 0.5
+
+    boe = BOE(["a", "b"])
+    boe.set_mass_theta(1.0)
+
+    s1 = BOE(["a", "b"])
+    s1.set_mass(["a"], 1)
+
+    s2 = BOE(["a", "b"])
+    s2.set_mass(["a"], 1)
+
+    s3 = BOE(["a", "b"])
+    s3.set_mass(["b"], 1)
+
+    stream = [s1, s2, s3]
+    boe.update_stream(stream, alpha)

@@ -1,6 +1,7 @@
 # UPDATED DS
 #  v0.2
 # pylint: disable=no-member
+# pylint: disable=eval-used
 # singleton: string
 # proposition: list of strings
 
@@ -110,6 +111,14 @@ class BOE:
         proposition = [x.lower() for x in proposition]
         index = self._get_index_from_dsvector(proposition)
         self.dsvector = (index, mass)
+
+    def set_masses(self, dsvector_as_dict):
+        """
+        Sets masses for several propositions
+        from a json entry
+        """
+        for key, value in dsvector_as_dict.items():
+            self.set_mass(eval(key), value)
 
     def set_mass_theta(self, mass):
         """
@@ -246,8 +255,9 @@ class BOE:
             if temp:
                 pl_a_minus_b = self.plausibility(temp)
 
-        mass_b_given_a = mass_b / (mass_b + pl_a_minus_b)
-        return mass_b_given_a
+            mass_b_given_a = mass_b / (mass_b + pl_a_minus_b)
+            return mass_b_given_a
+        return 0.0
 
     def update(self, new_frame, alpha):
         """
