@@ -64,3 +64,12 @@ s3.set_mass(["b"], 1)
 stream = [s1, s2, s3]
 boe.update_stream(stream, alpha)
 ```
+
+## DS-Theoretic Terminology
+- theta: Frame of Discernment (FoD) (list of singletons)
+- mass: a function mapping a subset of the FoD (i.e. a proposition) with number in R
+    (a.k.a: basic probability assignment, mass function)
+- core: F, those propositions that have mass > 0
+- focal_elements: Items in F.
+- belief: total support for a proposition without any ambiguity (sum of masses of subsets)
+- plausibility: Extent to which a proposition is plausible (sum of masses of overlapping sets)
