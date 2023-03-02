@@ -4,13 +4,13 @@ UNSURE is a python package that implements Dempster-Shafer theory of uncertainty
 
 ## Install (from PyPI)
 
-```
+```bash
 pip install unsure
 ```
 
 ## Usage
 
-```
+```python
 from unsure import BOE
 
 boe1 = BOE(["a", "b"])
@@ -23,13 +23,13 @@ The `BOE` class represents a DS-theoretic body of evidence. Once instantiated as
 
 ### enerate uncertainty intervals: 
 
-```
+```python
 boe.uncertainty(["a"])
 ```
 
 ### Fuse with other BOEs:
 
-```
+```python
 boe1 = BOE(["a", "b"])
 boe1.set_mass(["a"], 0.6)
 boe1.set_mass(["a", "b"], 0.4)
@@ -46,7 +46,7 @@ Many other fusion operators have been implemented. See `tests\` for examples.
 
 ### Update a BOE as new evidence is received
 
-```
+```python
 alpha = 0.5
 
 boe = BOE(["a", "b"])
